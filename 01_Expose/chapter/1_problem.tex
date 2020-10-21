@@ -1,0 +1,52 @@
+\chapter{Kontext und Problemfeld}
+\label{cha:Problemfeld und Kontext}
+ 
+Derzeit sind Singlepage-Application-Frameworks wie Vue.js und React.js laut \citeauthor{GithubStarSearch} mit die meist verfolgten Open Source Projekten weltweit. Sie finden ihren Einsatz in zahlreichen Webapplikationen und Websites jeglicher Größe und Art. Seit 2017 wird das Frontend des Hauptproduktes My.PORTAL der AVACO GmbH vollständig auf Vue.js Basis entwickelt.
+ 
+Laut eigenen Angaben des Unternehmens waren die Entwicklungsfreundlichkeit, die solide Community, die Performance, die vielen nützlichen Bibliotheken, die leichte Erlernung sowie die Unternehmensunabhängigkeit des Frameworks für die Einführung des Frameworks entscheidend gewesen.
+ 
+\section{Über das Produkt My.PORTAL}
+Mit My.PORTAL bietet die AVACO GmbH ein anpassbares Portal, das als Handels-,
+Kommunikations- und Kollaborationslösung in unterschiedlichen Nutzungskontexten eingesetzt werden kann. Besonders hervorgehobene Einsatzzwecke sind die Nutzung als Stadtportal, Unternehmensportal und Bildungsportal, in denen die Plattformbetreiber eine eigene für sie angepasste DSGVO-konforme Portallösung erhalten.
+ 
+\section{Kommunikation zwischen Backend und Frontend}
+Das in .NET implementierte Backend basiert auf einer Microservices-Architektur in welcher jeder Microservice gesondert voneinander agiert. Das Frontend kann über unterschiedliche Endpoints auf die einzelnen APIs der Services zugreifen. Zu Beginn des Projektes wurden RESTful APIs erstellt, nach c.a. 18 Monaten Entwicklung wurde begonnen erste GraphQl APIs zu implementieren. Daher kommunizieren heute ältere Services über REST-APIs und neuere über GraphQl APIs.
+ 
+\section{Frontend-Architektur}
+Das Frontend wird in einer modularisierten Weise entwickelt und als Single Page Application bereitgestellt. Derzeit besteht das Frontend aus den folgenden Modulen:
+\begin{itemize}
+ \item portal-frontend: Haupt-Applikation, die außerdem auch alle Instanzkonfigurationen beinhaltet.
+ \item portal-global-components: Bibliothek von wiederverwendbaren Vue-Komponenten
+ \item portal-tracker: Framework um Aktivitäten dem Backend zu übermitteln
+ \item portal-statistics: Weitere Vue-Applikation um Portal Administratoren Nutzungsstatistiken anzuzeigen
+\end{itemize}
+ 
+\section{Projektrelevante Herausforderungen im Frontend}
+\label{Projektrelevante Herausforderungen im Frontend}
+Über den Entwicklungszeitraum des Projektes haben sich einige Probleme in der Frontend Entwicklung herausgestellt.
+Diese werden im Folgenden erläutert.
+ 
+\subsection{Redundante Style Definition}
+Das Portal Styling wurde von Anfang an in SASS entwickelt. Jede Komponente hat in der Regel ihre komplett eigenen „Scoped” Style Definitionen innerhalb einer .vue Datei erhalten. Konstante Attributwerte wie beispielsweise Abstände, Gridgrößen und Farben wurden per SASS-Mixins oder SASS-Variablen eingefügt was zu redundanten Style Definitionen im transpilierten CSS Code geführt hat.
+ 
+\subsection{Property Hell}
+Zu Beginn des Projektes wurden viele Komponenten spezifisch für den ersten Einsatzkontext entwickelt. Für ein konsistentes UI-Design war es immer wieder nötig bestehende Komponenten in einer leicht-abgewandelten Form im Portal wiederzuverwenden. Dazu wurden regelmäßig neue Properties zu Komponenten hinzugefügt, um sie an neue Kontexte anzupassen. Diese Properties steuern oft nur einen einzigen Use-Case und erschweren es den Entwicklern die Dokumentation sowie den Code einer Komponente überblicken zu können.
+ 
+\subsection{Komponentenmanagement}
+Bisher wurden Komponenten gemäß dem Atomic Design Prinzip von Brad Frost entwickelt und geordnet. Dabei werden Komponenten in die Kategorien „Atom“, „Molekül“, „Organismus“, „Template“ und „Page“ kategorisiert. Dabei haben sich für dieses Projekt zwei Schwächen herausgestellt.
+\begin{enumerate}
+ \item Der Unterschied zwischen Molekülen und Organismen ist oft für die Komponenten nicht strikt definierbar.
+ \item Es kann passieren, dass größere Komponenten, wie beispielsweise Organismen Moleküle benötigen, die sonst keine andere Komponente benötigt. Diese Moleküle werden jedoch in dem Ordner Moleküle abgespeichert, was zu einer Unübersichtlichkeit der Repositories geführt hat.
+\end{enumerate}
+ 
+\subsection{Nachträgliches Komponenten Splitting}
+Es kommt vor, dass Abschnitte einer Vue-Komponente zur Wiederverwendung eines Markup Abschnitts in eine neue Komponente ausgelagert werden sollen. Durch die Scoped-SASS Style Definitionen ist es mühsam und fehleranfällig die richtigen Definitionen zu identifizieren und zu verschieben.
+ 
+\subsection{Ungenutzte Stylings}
+Über die Entwicklungszeit hinweg hat sich gezeigt, dass es Komponenten gibt, die gegenüber ihrer ersten Ausführung geändert wurden. Dabei konnte es passieren, dass ungenutzte Style Definitionen im Code verblieben sind.
+ 
+\subsection{Umständliche Dokumentation, der globalen Komponenten}
+Eine Dokumentation von Komponenten mit Code Beispielen und Property Auflistungen muss manuell vom Entwickler verantwortet werden. Dies führt dazu, dass Dokumentationen durch menschliche Fehler unvollständig sind. Zudem ist die manuelle Dokumentation aufwendig.
+ 
+\subsection{Portal-Config Abhängigkeit für Global Components}
+Jede Portal Instanz wird im portal-frontend-Repository konfiguriert und diese Konfiguration gespeichert. Das Repository portal-global-components ist zur Verwendung auf eine gültige Portal-Konfiguration aus portal-frontend angewiesen. Dadurch sind die Komponenten in Zukunft nicht in anderen Projekten ohne gültige Portal-Konfiguration nutzbar.

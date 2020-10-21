@@ -1,0 +1,180 @@
+% \documentclass[12pt]{article}
+\documentclass[BCOR=0mm,DIV11,titlepage,a4paper,oneside]{scrbook}
+\usepackage{scrhack}
+\usepackage[ngerman]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{subcaption}
+
+%fancyheadings funktioniert nicht mehr mit der KOMA Script Klasse scrbook
+
+\usepackage{wrapfig}
+
+\usepackage[authoryear,round]{natbib}
+\usepackage{usebib}
+\bibinput{literatur}
+
+% Mittels [H] können Bilder genau an einer Stelle positioniert werden
+\usepackage{float}
+
+\usepackage[breaklinks]{hyperref}
+
+% bewirkt das HyperLinks in der PDF nicht umrandet oder farbig sind
+\hypersetup{colorlinks=false}
+
+% package for colored text
+% black,white,green,red,blue,yellow,cyan,magenta
+\usepackage{color}
+
+% package for colored tables
+\usepackage{colortbl}
+
+%Paket zur Erzeugung von Anführungszeichen durch \enquote{Text}
+\usepackage[ngerman]{babel}
+\usepackage[babel, german=quotes]{csquotes}
+
+%Verhindern, dass eine neue Seite für ein einzelnes Wort/Zeile verwendet wird
+\clubpenalty = 10000 % schliesst Schusterjungen aus 
+\widowpenalty = 10000 % schliesst Hurenkinder aus (keine Beleidigung, sondern wirklich ein Fachbegriff)
+
+\usepackage{lipsum}
+
+% LISTINGS Code Highlighting Setup START
+\usepackage{upquote}
+\usepackage{listings}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{editorOcher}{rgb}{1, 0.5, 0} % #FF7F00 -> rgb(239, 169, 0)
+\definecolor{editorGreen}{rgb}{0, 0.5, 0} % #007C00 -> rgb(0, 124, 0)
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+
+% \lstdefinelanguage{JavaScript}{
+%   morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+%   morecomment=[s]{/*}{*/},
+%   morecomment=[l]//,
+%   morestring=[b]",
+%   morestring=[b]'
+% }
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{airforceblue} \bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{HTML5}{
+  language=html,
+  sensitive=true, 
+  alsoletter={<>=-},
+  otherkeywords={
+  % HTML tags
+  <html>, <head>, <template>, </template>, <template, <section, </section>, <header, </header>, <ul, </ul>, <li, </li>, <title>, </title>, <div>, </div>, <meta, />, </head>, <body>,
+  <canvas, \/canvas>, <script>, </script>, </body>, </html>, <nav>, </nav>, <!, html>, <style, </style>, ><
+  },  
+  ndkeywords={
+  % General
+  =,
+  % HTML attributes
+  charset=, id=, width=, height=, class=, lang=, v-for=,
+  % CSS properties
+  border:, transform:, -moz-transform:, transition-duration:, transition-property:, transition-timing-function:
+  },  
+  morecomment=[s]{<!--}{-->},
+  tag=[s]
+}
+
+\lstset{
+  % Basic design
+  backgroundcolor=\color{editorGray},
+  basicstyle={\small\ttfamily},   
+  frame=l,
+  % Line numbers
+  xleftmargin={0.75cm},
+  numbers=left,
+  stepnumber=1,
+  firstnumber=1,
+  numberfirstline=true,
+  % Code design   
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{darkgray}\ttfamily,
+  ndkeywordstyle=\color{editorGreen}\bfseries,
+  stringstyle=\color{editorOcher},
+  % Code
+  language=HTML5,
+  alsolanguage=JavaScript,
+  alsodigit={.:;},
+  tabsize=2,
+  showtabs=false,
+  showspaces=false,
+  showstringspaces=false,
+  extendedchars=true,
+  breaklines=true,        
+  % Support for German umlauts
+  literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+\lstset{literate=
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {Ã}{{\~A}}1 {ã}{{\~a}}1 {Õ}{{\~O}}1 {õ}{{\~o}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\euro}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1
+}
+\renewcommand{\lstlistingname}{Codebeispiel}% Listing -> Algorithm
+\renewcommand{\lstlistlistingname}{Codeverzeichnis}% List of Listings -> List of Algorithms
+
+% LISTINGS Code Highlighting Setup END
+
+\setlength{\parskip}{0.7em}
+
+\begin{document}
+
+\input{./chapter/titelseite}
+
+\input{./chapter/000-000_vorwort}
+
+\tableofcontents
+\setcounter{page}{1}
+\newpage
+
+\input{./chapter/001-000_einleitung}
+\input{./chapter/002-000_kontext}
+\input{./chapter/003-000_herausforderungen}
+\input{./chapter/004-000_komponentenbibliothek}
+\input{./chapter/005-000_tailwindcss}
+\input{./chapter/007-000_ergebnisse}
+\input{./chapter/007-500_ausblick}
+\input{./chapter/008-000_fazit}
+
+\newpage
+\include{./chapter/verzeichnisse}
+\include{./chapter/eid}
+
+\end{document}

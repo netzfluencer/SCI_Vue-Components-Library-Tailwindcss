@@ -1,0 +1,21 @@
+\chapter{Kontext der Arbeit}
+\label{chaKontext der Arbeit}
+\section{Über My.PORTAL}
+Mit My.PORTAL bietet die AVACO GmbH eine anpassbare Webplattform, die als Handels-,
+Kommunikations- und Kollaborationslösung in unterschiedlichen Nutzungskontexten eingesetzt werden kann. Besonders hervorgehobene Einsatzzwecke sind die Nutzung als Stadtportal, Unternehmensportal und Bildungsportal, in denen die Plattformbetreiber eine eigene für sie angepasste DSGVO-konforme Portallösung erhalten. \citep{AVACOWebsite}
+
+\section{Architekturen und Technologien}
+\subsection{Kommunikation} % (fold)
+Das in .NET implementierte Backend basiert auf einer Microservices-Architektur in welcher jeder Microservice gesondert voneinander agiert.  
+Zu Projektbeginn wurden Services über RESTful APIs zugänglich gemacht. Seit Ende 2018 werden neue Services mit GraphQL-API eingeführt, weshalb das System in beiden Weisen kommuniziert.
+
+\subsection{Frontend} % (fold)
+Das Frontend wird als Vue Single Page Application in einer modularisierten Stil entwickelt. Entscheidend für die Einführung von Vue.js waren laut Angaben der \cite{FrontendDocumentation} die Entwicklungsfreundlichkeit, die solide Community, die Performance, die vielen nützlichen Bibliotheken, die leichte Erlernung sowie die Unternehmensunabhängigkeit des Frameworks gewesen.
+
+Derzeit besteht das Frontend aus den folgenden Modulen:
+\begin{itemize}
+ \item \textbf{portal-frontend}: Haupt-Applikation, die außerdem auch alle Instanzkonfigurationen beinhaltet.
+ \item \textbf{portal-global-components}: Bibliothek von wiederverwendbaren Vue-Komponenten
+ \item \textbf{portal-tracker}: Framework um Aktivitäten dem Backend zu übermitteln
+ \item \textbf{portal-statistics}: Weitere Vue-Applikation um Portal Administratoren Nutzungsstatistiken anzuzeigen
+\end{itemize}

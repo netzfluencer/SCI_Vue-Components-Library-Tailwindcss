@@ -1,0 +1,63 @@
+\chapter{Kontext und Problemfeld}
+\label{cha:Problemfeld und Kontext}
+
+Weiteres:
+* Schnittstelle zur Medieinformatik verfassen
+
+* texte kann man zur review an die schreibwerkstatt senden
+
+... Erklärung was  warum
+
+... Hinführung zur Projektgröße und Komponentenmanagement
+
+... development HErausforderungen und updating
+
+... css herausforderungen
+
+... compononenten management
+
+Derzeit sind Singlepage-Application-Frameworks wie Vue.js und React.js laut \citeauthor{GithubStarSearch} mit die meist verflogten Open Source Projekten weltweit. Sie finden ihren Einsatz in zahlreichen Webapplikationen, Websites bis hin zu nativen Apps jeglicher Größe und Art. Seit 2017 wird das Frontend des Hauptproduktes My.PORTAL der AVACO GmbH vollständig auf Vue.js Basis entwickelt.
+
+Laut eigenen Angaben des Unternehmens waren die Entwicklungsfreundlichkeit, die solide Community, die Performance, die vielen nützlichen Bibliotheken, die leichte Erlernung sowie die Unternehmensunabhängigkeit des Frameworks für die Einführung des Framworks entscheidend gewesen.
+
+\section{Über das Produkt My.PORTAL}
+Mit My.PORTAL bietet die AVACO GmbH ein anpassbares Portal, das als Handels-,
+Kommunikations- und Kollaborationslösung in unterschiedlichen Nutzungskontexten eingesetzt werden soll. Besonders herforgehobene Einsatzzwecke sind die Nutzung als Städteportal, Unternehmensportal und Bildungsportal, in denen die Plattformbetreiber eine eigene für sie angepasste DSGVO-konforme Portallösung erhalten.
+
+\section{Kommunikation zwischen Backend und Frontend}
+Das in .NET implementierte Backend basiert auf einer Microservices-Architektur in welcher jeder Microservice gesondert von einander agiert. Das Frontend kann über unterschiedliche Endpoints auf die einzelnen APIs der Services zugreifen. Zu Beginn des Projektes wurden RESTful APIs erstellt, nach c.a. 18 Monaten Entwicklung wurde begonnen erste GraphQl APIs zu implentieren. Daher kommunzieren heute ältere Services über REST-APIs und neuere über GraphQl APIs mit dem Frontend.
+
+\section{Frontend-Architektur}
+Das Frontend wird in einer modularisierten Weise entwickelt und als Single Page Application bereitgestellt. Derzeit besteht das Frontend aus den folgenden Modulen:
+\begin{itemize}
+  \item portal-frontend: Main Application which contains aswell all indivual frontend deployment configuration for the clients.
+  \item portal-global-components: library of reusable vue-components for the portal
+  \item portal-tracker: Framework um Aktivität dem Backend zu übermitteln
+  \item portal-statistics: Weiter Vue-Applikation um Portaladministratoren Nutzungsstatistiken anzuzeigen
+\end{itemize}
+
+\section{Projektrelevante Herausforderungen im Frontend}
+Über den langen Entwicklungsraum des Projektes haben sich einige Probleme in der Frontendentwicklung herausgestellt.
+
+\subsection{Redudante Styledefintionen}
+Das Portalstyling wurde von Anfang an in SASS entwickelt. Jede Komponente hat in der Regel ihre komplett eigene „Scoped” Styledefintionen innerhalb einer .vue Datei erhalten. Konstante Attributwerte wie beispielsweise Abstände, Gridgrößen wurden per SASS-Mixins oder SASS-Variablen eingefügt was zu redudanten Styledefinitionen geführt hat.
+
+\subsection{Property Hell}
+Zu Beginn des Projektes wurden viele Komponenten spezifisch für den ersten Einsatzkontext entwickelt. Für ein konsitentes UI-Design wurde es über die Entwicklungszeit immer wieder nötig bestehende Komponenten in einer leicht-abgewandelten Form im Portal verwenden zu können. Um dies zu ermöglichen regelmäßig neue Properties zu Komponenten hinzugefügt, um sie an neue Kontexte anzupassen. Diese Properties steuern oft nur einen einzigen Use-Case und erschweren es den Entwicklern die Dokumentation sowie den Code einer Komponente überblicken zu können.
+
+\subsection{Komponentenmanagement und nachträgliches Splitting}
+Bisher wurden Komponenten gemäß dem Atomic Design Prinzip von Brad Frost entwickelt und geordnet. Hierbei werden Komponenten in die Kategorien ‰¸
+
+
+
+Zur Orientierung des UX-Reifegrades soll zunächst das Reifegradstufenmodell von helfen.
+
+\begin{figure}[!ht]
+	\centering
+		%[natürliche Breite in Pixeln, natürliche Höhe in Pixeln, Abhängigkeit von der Textbreite]
+		\includegraphics[width=0.50\textwidth]{images/reifegradmodell.png}
+	\caption{UX-Reifegrad-Modell \citep{WeichertQuintBartelUXManagement}}
+	\label{fig:box}
+\end{figure}
+
+Demnach lässt sich die CMP Digital Factory GmbH zum Anfang des Projektes auf die Stufe 2 \textit{AD-Hoc UX} einordnen, da nur einzelne Mitarbeiter sich gelegentlich tiefere Gedanken über die UX machen können.

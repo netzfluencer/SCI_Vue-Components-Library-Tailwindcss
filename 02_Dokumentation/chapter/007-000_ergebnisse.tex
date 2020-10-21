@@ -1,0 +1,87 @@
+\chapter{Resultate}
+\label{cha:Ergebnisse}
+
+\section{Chancenbewertung Tailwindcss}
+Der folgende Abschnitt bewertet die in Abschnitt \ref{sec:Chanceneinschtzung} gelisteten Chancen und Risiken im Hinblick auf die derzeitige Implementierung von Tailwindcss.
+\subsection{Redundante CSS Definitionen}
+\label{subsec:redundantCSS}
+Durch den Einsatz von Tailwindcss wird der Nutzung von SASS-Mixins vorgebeugt. Da SASS nach dem Tailwindcss Refactoring vollständig entfernt werden wird sind Entwickler bereits jetzt dazu angehalten keine Mixins mehr zu verwenden.
+
+Um Einschätzen zu können inwieweit sich das Entfernen von Mixins lohnt wurde eine exemplarische Berechnung des von \textit{+make-col()} erzeugten Codes angefertigt.
+
+Mit dem Wissen, dass die drei Displaygrößen Mobile, Tablet und Desktop im Projekt unterschiedliche Spezifitäten haben müssen führt der Einsatz des Mixins zu redundanten Code, der sich derzeit mit äquivalenten Utility-First CSS Klassen um c.a. 88 - 90\% reduzieren ließe. 
+
+\begin{quotation}
+	\textbf{10 Parameterwerte * 3 Screengrößen = 30 Klassen bzw. bei 12 Parameterwerten wären es dauerhaft 36 Klassen} (vgl. \ref{sec:redundantCSS})
+\end{quotation}
+
+Somit versursacht der Einsatz dieses Mixins allein 34 KB (28KB minified) (bezogen auf 303-maligen Gebrauch). Das Tailwindcss Äquivalent hat jedoch ledliglich eine Größe von 3,9 KB (3,3KB minified).
+
+Da bisher noch kein vollständiges Refactoring des Frontends umgesetzt wurde, sondern diese Arbeit sich mit der Umsetzung einer geeigneten Komponentenbibliothek sowie der generellen Einführung von Tailwindcss befasst, kann die gesamte CSS-Ersparnis im Vergleich zu SASS noch nicht ermittelt werden. Jedoch ist das Portal-Frontend durchaus komplexer als die ehemalige Algolia-Dokumentation \citep{AlgoliaTailwindBlog} gestaltet, weshalb man ziemlich sicher von einer ähnlich guten Einsparung von 60\% Code ausgehen kann.
+
+\subsection{Ungenutzte CSS Klassen}
+\label{subsec:unusedCSS}
+Diese Chance hat sich durch Tailwindcss und PurgeCSS bewahrheitet. Ungenutzte CSS Klassen werden durch \textit{PurgeCSS} entfernt. Jedoch ist dies nicht die robusteste Art ungenutzten Code zu behandeln, da der Code immernoch in den Quelldateien verweilt. Durch den vollständigen Wechsel zu Tailwindcss wird dieser Problematik jedoch ebenfalls entgegengewirkt, da in der Regel keine neuen CSS Klassen definiert werden. Wird ein Markupabschnitt bearbeitet oder entfernt, werden die gesetzten Utility-Klassen gleichmaßen behandelt (entfernt/bearbeitet). Diese Chance hat sich bereits jetzt schon in einigen Komponenten bewahrheitet.
+
+\subsection{Property Hell}
+\label{sec:propertyHellSolution}
+Die Verhalt bzgl. der Property-Hell hat sich nur teilweise durch Tailwindcss verbessert. Die Gründe für die Entstehung einer Property Hell sind vielseitig und zunächst nicht durch Storybook oder
+Tailwindcss zu beseitigen. Um eine Verbesserung zu erlangen muss ein anderer Architekturstil von Vue-Komponenten aufgesetzt werden, der einer Property-Orientierung entgegenwirkt.
+
+Durch eigene Annahmen, die auf die Erfahrung der letzten Entwicklungsjahre basierte wurde zunächst geprüft ob ein Architekturstil unter verstärkten Einsatz von \textit{Slots} zweckdienlich ist. Anders als Properties werden bei Slots nicht JavaScript-Typen weitergegeben sondern Codeabschnitte definierte in welche weiterer Code eingefügt werden kann \citep{VueDocsSlots}.
+
+\cite{SlotsPropsArticle} befürwortet in seinem Artikel eine ähnliche Herangehensweise. Die Vorteile listet er wie folgt:
+
+\begin{itemize}
+  \item \textbf{Flexibilität}: Für neue Slot-Inhalte müssen keine neuen Properties definiert werden.
+  \item \textbf{Komponentenweitergabe}: Auch Komponenten können in einen Slot eingefügt werden.
+  \item \textbf{Keine If-Statements}: Properties müssen nicht validiert werden.
+  \item \textbf{Bessere Lesbarkeit}
+\end{itemize}
+
+Dadurch, dass in einen Slot Komponenten eingefügt werden können, müssen diese nicht mehr im Eltern-Element eingefügt werden, sodass Properties nicht mehr durchgereicht werden.
+
+\lstinputlisting[caption={ChatWindowContacts.vue}, label={ChatWindowContacts}]{code/007-000_ergebnisse/ChatWindowContacts.vue}
+
+Im Codebeispiel wurde außerdem eine \textit{rounedClass} Property eingeführt. Diese dient dazu dynamisch Utility-Klassen an ein Markup-Element zu setzen. Dadurch müssen nicht mehr weiter dynamische Klassen definiert werden wie zum Beispiel eine Klasse \textit{entity--rounded-bigger} die durch eine boolische Property \textit{isRoundedBigger = true} gesetzt werden. Stattdessen kann der Entwickler eine \textit{roundedClass} wie ein normales Class Attribut behandeln, dass \textit{entity} gesetzt wird und den Standardwert mit genau den Werten überschreiben, die in seinem Kontext benötigt werden.
+
+Ein Beispiel wäre, der \textit{Entity} nur die \textit{rounded} Erscheinung auf mobilen Geräten verleihen zu wollen: 
+
+\begin{quotation}
+	\textit{roundedClass = "rounded md:rounded-none"} (mit diesem Vorgehen muss der Entwickler keine neue Prop wie \textit{isRoundedOnlyMobile} definieren)
+\end{quotation}
+
+\subsection{Post-Modularisierung von Komponenten}
+\label{subsec:postSplitting}
+Diese Chance hat sich positiv bewahrheitet. Das Verschieben vn Markup-Abschnitten zusammen mit Utility-Klassen ist bei weiten nicht mehr so komplex. Jedoch ist es weiterhin schwierig die richtigen Script-Abschnitt herauszufiltern um eine Komponente inkl. Funktionalität zu extrahieren. In Abschnitt \ref{cha:vue3} soll geprüft werden ob Vue Version 3 neue Möglichkeiten bietet, die sich positiv auf diesen Prozess auswirken.
+
+\subsection{Tailwindkonfiguration  statt  Portalkonfiguration  in  portal-storybook}
+\label{subsec:tailwindConfVSPortalConf}
+Tailwindcss hat diese Chance letztendlich erfüllt. Die Repostorystruktur sind nun nicht mehr vom client (portal-frontend) abhängig. Das Setup von \textit{portal-storybook} ist jedoch für ein Projekt wie \textit{portal-frontend} durch die verschiedenen Konfigurationsdateien etwas komplizierter gestaltet als zunächst für Standard-Vue-Applikationen angenommen.
+
+\section{Risikobewertung Tailwindcss}
+\subsection{Technologie Konflikte}
+Dieses Risiko hat sich mit der Einführung von Tailwindcss bewahrheitet. Da die Frameworks Bootstrap und Tailwindcss beide auf eigenen Reset.css Dateien basieren, die beide die Standardbrowser Styles anpassen, gab es viele Konflikte bei Style-Elementen, wie Überschriften, Textabschnitte, Links und Listen. Da jedoch Tailwindcss langfristig als Stylebasis dienen soll, war es besser für My.PORTAL besser die Bootstrap Reset-Styles zu entfernen und die neuen Bugs im Portal manuell mit Tailwindcss Utility Klassen wieder in die ursprüngliche Erscheinung zu gestalten. Zudem mussten einige Third-Party-Plugins auf CSS-Klassen geprüft werden, die nicht von PurgeCSS entfernt werden dürfen. Dies war zeitaufwendig jedoch auch nicht schwierig.
+
+\subsection{Weitere Risiken}
+Inwieweit die geringe Langzeiterfahrung mit Tailwindcss und das bevorstehende Upgrade auf Node 12 Herausforderungen mit sich bringen, lässt sich schwierig prognostizieren und bewerten. Jedoch soll in Zukunft ein größeres Technologieupgrade im gesamten Portal geschehen, weshalb das Upgrade auf Node 12 ohnehin mittlerweile als Vorteil zu bewerten ist und die Upgrades an sich unter anderem für dieses Projekt als neue Chancen wie Risiken kategorisiert werden können (vgl Abschnitt ).
+
+\section{Weitere Beobachtung}
+Nach der Implementierung und Nutzung von \textit{portal-storybook} konnten unteranderem neue Herausforderungen, Chancen und Risiken aufgedeckt werden.
+\subsection{Neue Herausforderungen}
+\label{sec:newChallenges}
+\begin{itemize}
+  \item \textbf{Debugging: Codemarkup identifizieren}: Wenn man transpilierten Code im Browser zum untersuchen identifizieren möchte, kann durch die fehlenden individuellen Klassennamen eine schnelle Identifizierung des gesuchten Codeabschnitts schwierig sein. Ein Hilfe gegen dieses Problem sind der konsequente Einsatz von semantisch richtigen HTML5-Tags, jedoch tritt das Problem dennoch gelegentlich auf.
+  \item \textbf{Länger \emph{Build Time} auf Production}: Durch den zusätzlichen Einsatz von PurgeCSS hat sich die Buildtime eines production-stage Portals verdreifacht. Da SASS ebenfalls noch im Portal enthalten ist, ist eine Verbesserung abzusehen, da mit dem entfernen von SASS der Preprozessor und viele CSS Klassen entfernt werden. Jedoch ist es nicht einschätzbar wie positiv der Effekt ausfallen wird.
+\end{itemize}
+
+\subsection{Neue Chancen und Risiken}
+Für Storybook, Tailwindcss, Node.js und Vue.js stehen Upgrades auf neue Hauptversionen an. Diese Upgrades bringen allgemein neue Features und bessere Performance sind aber auch für eine dauerhafte Aktualität des Portals notwendig. 
+
+\textbf{Tailwindcss} wird in Version 2 einige Deprecation-Änderungen enthalten, jedoch wird auf diese Änderungen bereits in den aktuellen Versionen hingewiesen und es gibt die Möglichkeit Tailwind bereits mit den neuen Änderungen zu verwenden. 
+
+\textbf{Storybook} wäre bereits möglich zu aktualisieren, allerdings besteht derzeit noch immer das Dokumentationsproblem aus Abschnitt \ref{sec:storybooksetup}. Solange dieses Problem nicht gelöst ist, wäre ein Upgrade unpraktisch. Daher ist dieses Upgrade trotz Chancen auf ein besseres (offizielles) Dokumentationsbild auch als ein Risiko zu betrachten, welches das Aktualisieren generell blockt.
+
+\textbf{Vue.js} Version 3 ist bereits veröffentlicht. Jedoch sind die meisten eingesetzten Vue-Community-Projekte noch nicht entsprechend aktualisiert worden. Die AVACO GmbH plant mit dem Launch von Nuxt.js Version 3, welches auf Vue 3 aufbauen soll, ein Upgrade auf Vue Version 3 mit Nuxt.js zu tätigen.
+Mit diesem Upgrade sind viele Chancen und Risiken verbunden, die nicht direkt im Zusammenhang mit Tailwindcss oder Storybook stehen werden. In Kapitel \ref{cha:vue3} soll ein näherer Ausblick im Hinblick auf dieses Projekt unter Vue Version 3 gegeben werden.
+
