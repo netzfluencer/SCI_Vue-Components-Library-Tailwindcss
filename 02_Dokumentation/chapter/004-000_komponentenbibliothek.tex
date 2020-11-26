@@ -105,6 +105,7 @@ export default {
 \end{lstlisting}
 \end{enumerate}
 \subsection{Repositoryaufbau}
+\label{sec:repoaufbau}
 Wie bereits im Vorwort erwähnt wird in dieser Arbeit nicht das Orginal-Repository \textit{portal-storybook} aus dem Firmeneigentum der AVACO GmbH referenziert sondern eine andere Komponentenbiliothek (\textit{tailwindstories}) die auf den selben Konzepten und Lösungen aufbaut, nicht die Firmenkomponenten enthält und neu aufgetauchte Probleme aus \textit{portal-storybook} (vgl. \ref{sec:newChallenges}) bereits mitbehandelt.
 
 Die Abbildung \ref{fig:repoStorybook} am Ende dieses Kapitels zeigt einen Screenshot des \textit{tailwindstories}-Repository und stellt den Verzeichnisaufbau nach der Einführung von storybook in ein neues \textit{vue-cli-3} Vue-Projekt (v.2.) da.
@@ -154,4 +155,15 @@ Zu Beginn des Projektes wurde Storybook Version 4 in \textit{portal-storybook} i
 Seit der Storybook Version 6 wird das Storybook Addon \textit{@storybook/addon-info} auf welchem das Addon \textit{storybook-addon-vue-info} basiert nicht mehr unterstützt und Storybook bietet nun offiziell das Addon \textit{@storybook/addon-docs} für den Zweck automatisierter Komponenten-Analysen an. Dieses Addon arbeitet derzeit besonders gut mit React Komponenten aber auch Vue Komponenten können analysiert und mit ihren Eigenschaften dargestellt werden. Es gibt die Möglichkeit Property-Werte direkt aus der GUI heraus zu manipulieren. Der einzige Nachteil im Vergleich zu dem nun veralteten (deprecated) \textit{storybook-addon-vue-info} ist, dass Code-Snippets derzeit nicht den eigentlichen Code der dargestellten Komponente enthalten, sondern den Code der Story \citep{GithubIssueStorybook}. In React mit JSX tritt dieses Problem jedoch nicht auf.
 
 Da dies jedoch für eine gute Developer-Expierence behindernd ist, wurde \textit{tailwindstories} zunächst auch nicht auf der Storybook Version 6 aufgebaut sondern auf der Version 5 zusammen mit \textit{storybook-addon-vue-info}. In der Zukunft soll jedoch ein Upgrade auf Version 6 mit \textit{@storybook/addon-docs} ausgeführt werden.
+
+\subsection{Komponentengruppierung}
+In Abschnitt \ref{sec:repoaufbau} wurde bereits der generelle Aufbau des Repositorys erläutert jedoch soll im folgenden ein weiteres Prinzip zum Management mit Komponenten präsentiert werden um die globalen Komponentenordner \textit{elements}, \textit{patterns} und \textit{templates} nicht mit kontextgebundenen Komponenten, wie in Codebeispiel \ref{Komponenten Management - Navbar.vue} gezeigt zu füllen.
+
+
+Generell können sollen Komponenten nach Charakteristiken in Unterordnern eingeordnet werden. So können beispielsweise Formular-Elemente wie Inputs, Textareas, Datum-Selektoren in \textit{elements/form} eingeordnet werden. Jede Vue-Komponenten-Datei soll mit einem Großbuchstaben anfangen, dass beispielsweise in \textit{elements/form} die Dateien \textit{FormInput.vue} und \textit{FormTextarea.vue} befinden. Ein weiteres Merkmal ist der Prefix \textit{Form} in den Dateinamen. Dieser hilft den Entwicklern den Ort der Komponente zu identifizieren. Der Prefix orientiert sich immer an den letzten Ordnername des Dateiweges. Würde man den Ordner \textit{form} in einem weiteren Ordner einnisten so würden sich die Dateinamen nicht ändern. Ein Gruppierungsordner soll immer mit einem Kleinbuchstaben anfangen.
+
+Die Lösung für das Problem mit der Einordnung von kontextgebundenen Komponenten gestaltet sich nun so, dass ein Komponente wie \textit{Navbar.vue} beispielsweise in \textit{patterns/Navbar/Navbar.vue} eingeordnet werden kann. Der Ordner \textit{Navbar} beginnt wie eine Komponete mit einem Großbuchstaben und darf in einem \textit{\_components}-Ordner \textit{elements}, \textit{patterns} und \textit{templates} unkategorisiert enthalten. Diese Komponenten sind jedoch nur im Kontext von \textit{Navbar.vue} zu verwenden, entweder als Kind in einem Slot einer Navbar.vue Instanz oder in der SFC von Navbar.vue. Der Prefix dieser Komponente richtet sich an den Ordnernamen über \textit{\_components}; in diesem Fall \textit{Navbar}. Das folgende Beispiel soll den Aufbau verdeutlichen. 
+
+\lstinputlisting[caption={components/patterns/Navbar/Navbar.vue}, label={KomponentenManagementLoesungNavbar.vue}]{code/004-000_komponentenbib/KomponentenManagement.vue}
+
 
