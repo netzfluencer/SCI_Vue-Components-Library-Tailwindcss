@@ -10,7 +10,7 @@
 // Die importierten Komponenten werden jedoch nur von dieser Datei benötigt.
 import NavTab from '../../molecules/Navigation/NavTab.vue'
 import NavTabButton from '../../molecules/Navigation/NavTabButton.vue'
-// Allerdings werden die Komponenten in den Molekül-Ordner übergeordnet, was die Übersichtlichkeit des Ordners im Hinblick auf alle weiteren Komponenten negativ beeinflußt
+// Allerdings werden die Komponenten in den Molekül-Ordner übergeordnet, was die Übersichtlichkeit des Ordners im Hinblick auf alle weiteren Komponenten negativ beeinflußt und den Ordner "aufbläht".
 
 export default {
   data() {

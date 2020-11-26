@@ -3,7 +3,7 @@
 
 Mit einem Upgrade auf Vue Version 3 kommt es zu einigen Veränderungen und neuen Features für Vue-Entwickler. 
 
-Ein Feature welches optional aber für den Kontext dieser Arbeit besonders hervorzuheben ist, ist das Composition API. Diese wurde für die Entwicklung von Komponenten in größeren Vue-Applikationen gestaltet wurde und stellt eine Alternative zu der weiterhin verfügbaren Options API dar.
+Ein Feature welches optional aber für den Kontext dieser Arbeit besonders relevant ist, ist das Composition API. Dieses wurde für die Entwicklung von Komponenten in größeren Vue-Applikationen gestaltet und stellt eine Alternative zu der weiterhin verfügbaren Options API dar.
 Das Composition API wurde insbesondere im Hinblick auf die zwei folgenden Probleme entwickelt \citep{Vue3DocsLogicReuse}: 
 
 \begin{itemize}
@@ -11,4 +11,4 @@ Das Composition API wurde insbesondere im Hinblick auf die zwei folgenden Proble
   \item \textbf{Keine einfachen Mechanismen für Code-Extrationen}: Es gibt keine optimalen Möglichkeiten Code aus Komponenten so zu extrahieren um ihn in anderen Komponenten zu verwenden.
 \end{itemize}
 
-Beide Probleme sind auch die Hauptursachen warum in die Post-Modularisierung von Komponenten (vgl. Abschnitt \ref{subsec:postSplitting}) erschwert wird. Mit der Einführung der \textit{setup()} Methode und logischen Strukturierung des Codes würde somit ein Mechanismus entstehen, der das extrahieren von Code erleichtert.
+Beide Probleme sind auch die Hauptursachen warum in die Post-Modularisierung von Komponenten (vgl. Abschnitt \ref{subsec:postSplitting}) erschwert wird. Mit der Einführung der \textit{setup()} Methode und logischen Strukturierung des Codes würde somit ein Mechanismus entstehen, der das extrahieren von Code erleichtert und generell zu einer anderen Struktur und besseren Lesbarkeit des Komponenten-Codes führt.
