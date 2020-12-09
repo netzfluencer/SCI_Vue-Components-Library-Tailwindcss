@@ -12,6 +12,8 @@
 *.cb2
 .*.lb
 
+node_modules/
+
 ## Intermediate documents:
 *.dvi
 *.xdv
